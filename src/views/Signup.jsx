@@ -12,19 +12,30 @@ export default function Signup() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmSent, setConfirmSent] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true); setError('');
-    const { data, error } = await signUp(email, password);
+    const householdName = name || 'Our Household';
+    const { data, error } = await signUp(email, password, {
+      // Stash the household name so DataProvider can create it after the user
+      // confirms the email and lands back on the site with a session.
+      data: { household_name: householdName },
+      emailRedirectTo: `${window.location.origin}/`,
+    });
     if (error) { setBusy(false); return setError(error.message); }
-    const user = data.user;
-    if (!user) {
+
+    // Email confirmation ON: data.session is null, user must check inbox.
+    if (!data.session) {
       setBusy(false);
-      return setError('Check your email to confirm your account, then sign in.');
+      setConfirmSent(true);
+      return;
     }
+
+    // Email confirmation OFF: we already have a session — create household now.
     try {
-      const hh = await createHousehold(user.id, { name: name || 'Our Household' });
+      const hh = await createHousehold(data.user.id, { name: householdName });
       await seedHousehold(hh.id);
     } catch (e2) {
       setBusy(false);
@@ -33,6 +44,23 @@ export default function Signup() {
     setBusy(false);
     navigate('/', { replace: true, state: { needsRegionSetup: true } });
   };
+
+  if (confirmSent) {
+    return (
+      <AuthShell title="Check your email" subtitle="We sent a confirmation link">
+        <p style={{ fontSize: 15, color: '#5D4E2A', lineHeight: 1.6, margin: '0 0 16px' }}>
+          We just emailed <strong>{email}</strong> with a link to confirm your account.
+          Click it and you'll be signed in automatically.
+        </p>
+        <p style={{ fontSize: 13, color: '#8B7D5B', margin: '0 0 16px' }}>
+          The link can take a minute to arrive. Check your spam folder if you don't see it.
+        </p>
+        <Link to="/login" style={{ color: '#4A5D3A', fontWeight: 600, fontSize: 14 }}>
+          Back to sign in
+        </Link>
+      </AuthShell>
+    );
+  }
 
   return (
     <AuthShell title="Start your academy" subtitle="Create an account for your household">

@@ -23,8 +23,14 @@ export function AuthProvider({ children }) {
     user: session?.user || null,
     loading,
     signIn: (email, password) => supabase.auth.signInWithPassword({ email, password }),
-    signUp: (email, password) => supabase.auth.signUp({ email, password }),
+    signUp: (email, password, options) =>
+      supabase.auth.signUp({ email, password, options }),
     signOut: () => supabase.auth.signOut(),
+    resetPassword: (email) =>
+      supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      }),
+    updatePassword: (password) => supabase.auth.updateUser({ password }),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

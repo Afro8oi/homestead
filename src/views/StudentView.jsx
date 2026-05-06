@@ -24,20 +24,20 @@ export default function StudentView() {
   };
 
   return (
-    <div className="fade-in" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
       <div style={{ background: `linear-gradient(135deg, ${student.color} 0%, ${student.color}dd 100%)`, borderRadius: 20, padding: 40, color: '#F5F0E6', marginBottom: 32, position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -60, right: -60, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,253,247,0.08)' }} />
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ width: 96, height: 96, borderRadius: '50%', background: '#FFFDF7', display: 'flex', alignItems: 'center', justifyContent: 'center', ...s.serif, fontSize: 48, fontWeight: 500, color: student.color }}>{student.avatar}</div>
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ width: 96, height: 96, borderRadius: '50%', background: '#FFFDF7', display: 'flex', alignItems: 'center', justifyContent: 'center', ...s.serif, fontSize: 48, fontWeight: 500, color: student.color, flexShrink: 0 }}>{student.avatar}</div>
           <div>
             <div style={{ fontSize: 13, letterSpacing: '0.2em', opacity: 0.85, textTransform: 'uppercase' }}>Hello</div>
-            <h1 style={{ ...s.serif, fontSize: 56, fontWeight: 500, margin: '4px 0', letterSpacing: '-0.02em', lineHeight: 1 }}>{student.name}</h1>
+            <h1 className="h-display" style={{ ...s.serif, fontSize: 56, fontWeight: 500, margin: '4px 0', letterSpacing: '-0.02em', lineHeight: 1 }}>{student.name}</h1>
             <div style={{ fontSize: 15, opacity: 0.9 }}>{student.grade} · Age {student.age}</div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 24 }}>
+      <div className="grid-auto" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 24 }}>
         <div style={{ background: '#FFFDF7', borderRadius: 16, padding: 32, border: '1px solid #E8DCC4' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
             <h2 style={{ ...s.serif, fontSize: 28, fontWeight: 500, margin: 0, color: '#2B2416' }}>Today's lessons</h2>

@@ -36,8 +36,9 @@ export default function Login() {
           {busy ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-      <div style={{ marginTop: 18, fontSize: 14, color: '#5D4E2A' }}>
-        New here? <Link to="/signup" style={{ color: '#4A5D3A', fontWeight: 600 }}>Create an account</Link>
+      <div style={{ marginTop: 18, fontSize: 14, color: '#5D4E2A', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+        <span>New here? <Link to="/signup" style={{ color: '#4A5D3A', fontWeight: 600 }}>Create an account</Link></span>
+        <Link to="/forgot-password" style={{ color: '#8B7D5B', fontWeight: 500 }}>Forgot password?</Link>
       </div>
     </AuthShell>
   );
@@ -45,7 +46,7 @@ export default function Login() {
 
 export function AuthShell({ title, subtitle, children }) {
   return (
-    <div className="fade-in" style={{ maxWidth: 440, margin: '0 auto', padding: '80px 32px' }}>
+    <div className="fade-in auth-shell" style={{ maxWidth: 440, margin: '0 auto', padding: '80px 32px' }}>
       <div style={{ fontSize: 11, letterSpacing: '0.25em', color: '#8B7D5B', textTransform: 'uppercase', marginBottom: 8 }}>Homestead Academy</div>
       <h1 style={{ ...s.serif, fontSize: 40, fontWeight: 400, letterSpacing: '-0.02em', margin: '0 0 8px', color: '#2B2416' }}>{title}</h1>
       <p style={{ fontSize: 15, color: '#5D4E2A', margin: '0 0 28px' }}>{subtitle}</p>

@@ -13,7 +13,7 @@ export default function SubjectDetailView() {
 
   if (!subject) {
     return (
-      <div className="fade-in" style={{ maxWidth: 900, margin: '0 auto', padding: '48px 32px' }}>
+      <div className="fade-in page-pad" style={{ maxWidth: 900, margin: '0 auto', padding: '48px 32px' }}>
         <button onClick={() => navigate('/library')} style={{ background: 'transparent', border: 'none', color: '#5D4E2A', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, display: 'flex', alignItems: 'center', gap: 6, padding: 0, marginBottom: 24 }}>
           <ChevronLeft size={16} /> Back to library
         </button>
@@ -30,7 +30,7 @@ export default function SubjectDetailView() {
   };
 
   return (
-    <div className="fade-in" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
       <button onClick={() => navigate('/library')} style={{ background: 'transparent', border: 'none', color: '#5D4E2A', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, display: 'flex', alignItems: 'center', gap: 6, padding: 0, marginBottom: 24 }}>
         <ChevronLeft size={16} /> Back to library
       </button>

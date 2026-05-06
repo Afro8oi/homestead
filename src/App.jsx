@@ -14,13 +14,15 @@ import RecordsView from './views/RecordsView.jsx';
 import AdminPanel from './views/AdminPanel.jsx';
 import Login from './views/Login.jsx';
 import Signup from './views/Signup.jsx';
+import ForgotPassword from './views/ForgotPassword.jsx';
+import ResetPassword from './views/ResetPassword.jsx';
 import { REGIONS } from './data/regions.js';
 import { avgGrade, getTrend, getMastery } from './lib/gradeConversion.js';
 import { AuthProvider, useAuth } from './lib/auth.jsx';
 import {
   getHousehold, createHousehold, updateHouseholdRegion,
   listStudents, insertStudent, updateStudent, deleteStudent,
-  listGrades, insertGrade,
+  listGrades, insertGrade, seedHousehold,
 } from './lib/api.js';
 import { s } from './styles.js';
 
@@ -47,6 +49,8 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/*" element={<ProtectedShell />} />
     </Routes>
   );
@@ -79,7 +83,15 @@ function DataProvider() {
     (async () => {
       try {
         let hh = await getHousehold(user.id);
-        if (!hh) hh = await createHousehold(user.id);
+        let justCreated = false;
+        if (!hh) {
+          // First sign-in (likely after email confirmation). Use the household
+          // name they entered at signup if it was stashed in user metadata.
+          const name = user.user_metadata?.household_name || 'Our Household';
+          hh = await createHousehold(user.id, { name });
+          await seedHousehold(hh.id);
+          justCreated = true;
+        }
         const [sts, grs] = await Promise.all([
           listStudents(hh.id),
           listGrades(hh.id),
@@ -88,12 +100,16 @@ function DataProvider() {
         setHousehold(hh);
         setStudentsState(sts);
         setGradesState(grs);
+        if (justCreated) setNeedsRegionSetup(true);
         setLoading(false);
       } catch (e) {
         if (!cancelled) { setError(e.message || String(e)); setLoading(false); }
       }
     })();
     return () => { cancelled = true; };
+    // user.user_metadata is read but only matters on first hydration after signup;
+    // we don't want to refetch the household every time metadata changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
 
   if (loading) return <LoadingScreen />;

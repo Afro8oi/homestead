@@ -60,3 +60,40 @@ input:focus, textarea:focus, select:focus {
 }
 
 button { font-family: inherit; }
+
+/* ---------------- Mobile responsiveness ---------------- */
+
+/* Nav: collapse to icons-only and let content scroll horizontally if needed. */
+@media (max-width: 720px) {
+  .nav-root {
+    padding: 12px 16px !important;
+    gap: 8px;
+  }
+  .nav-brand-text { display: none; }
+  .nav-item-label { display: none; }
+  .nav-item { padding: 10px !important; }
+  .nav-region-label { display: none; }
+  .nav-signout span { display: none; }
+}
+
+/* Generic page padding shrink on mobile */
+@media (max-width: 720px) {
+  .page-pad { padding: 24px 16px !important; }
+}
+
+/* Auth screens: less top padding on phones */
+@media (max-width: 720px) {
+  .auth-shell { padding: 32px 16px !important; }
+}
+
+/* Headlines and grid: shrink on mobile */
+@media (max-width: 720px) {
+  .h-display { font-size: 32px !important; line-height: 1.15 !important; }
+  .grid-auto { grid-template-columns: 1fr !important; }
+}
+
+/* Tables (planner/records) become horizontally scrollable on phones already
+   via overflow-x:auto in their containers — make sure modal widths fit too. */
+@media (max-width: 720px) {
+  .modal-card { width: calc(100vw - 24px) !important; max-height: 88vh !important; }
+}

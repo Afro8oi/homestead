@@ -76,7 +76,7 @@ export default function MultiplicationQuest() {
 
   if (phase === 'start') {
     return (
-      <div className="fade-in" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
+      <div className="fade-in page-pad" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
         <button onClick={() => navigate('/games')} style={{ background: 'transparent', border: 'none', color: '#5D4E2A', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, display: 'flex', alignItems: 'center', gap: 6, padding: 0, marginBottom: 24 }}>
           <ChevronLeft size={16} /> Back to games
         </button>
@@ -104,7 +104,7 @@ export default function MultiplicationQuest() {
 
   if (phase === 'done') {
     return (
-      <div className="fade-in" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
+      <div className="fade-in page-pad" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
         <div style={{ background: feedback.victory ? 'linear-gradient(135deg, #B8860B, #a67a0a)' : 'linear-gradient(135deg, #6B4E71, #5a4160)', borderRadius: 20, padding: 48, color: '#FFFDF7', textAlign: 'center' }}>
           <div className="pulse">
             {feedback.victory ? <Trophy size={80} strokeWidth={1.3} style={{ margin: '0 auto 20px' }} /> : <Shield size={80} strokeWidth={1.3} style={{ margin: '0 auto 20px' }} />}
@@ -126,7 +126,7 @@ export default function MultiplicationQuest() {
   }
 
   return (
-    <div className="fade-in" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 700, margin: '0 auto', padding: '48px 32px' }}>
       <div style={{ background: '#2B2416', borderRadius: 20, padding: 40, color: '#F5F0E6', position: 'relative', overflow: 'hidden' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 32 }}>
           <div style={{ fontSize: 12, letterSpacing: '0.2em', opacity: 0.7, textTransform: 'uppercase' }}>Round {round + 1} of {TOTAL_ROUNDS}</div>

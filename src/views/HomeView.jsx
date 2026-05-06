@@ -16,11 +16,11 @@ export default function HomeView() {
     { time: '2:15', subject: 'Art & Project Work', duration: '45 min', type: 'individual' },
   ];
   return (
-    <div className="fade-in" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
       <div style={{ marginBottom: 64, position: 'relative' }}>
         <div style={{ position: 'absolute', top: -40, right: -40, width: 280, height: 280, background: 'radial-gradient(circle, rgba(184,134,11,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ fontSize: 12, letterSpacing: '0.25em', color: '#8B7D5B', textTransform: 'uppercase', marginBottom: 16 }}>Tuesday · April 21</div>
-        <h1 style={{ ...s.serif, fontSize: 56, fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 20px', color: '#2B2416' }}>
+        <h1 className="h-display" style={{ ...s.serif, fontSize: 56, fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 20px', color: '#2B2416' }}>
           Welcome home,<br />
           <span style={{ fontStyle: 'italic', color: '#4A5D3A' }}>the Whitfields.</span>
         </h1>

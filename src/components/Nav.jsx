@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Library, Gamepad2, FileText, Settings, Leaf } from 'lucide-react';
+import { Home, Users, Library, Gamepad2, FileText, Settings, Leaf, LogOut } from 'lucide-react';
 import { s } from '../styles.js';
 
 const items = [
@@ -21,26 +21,26 @@ export default function Nav({ region, onChangeRegion, onSignOut }) {
   const navigate = useNavigate();
 
   return (
-    <nav style={{
+    <nav className="nav-root" style={{
       background: '#FFFDF7', borderBottom: '1px solid #E8DCC4', padding: '16px 32px',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      position: 'sticky', top: 0, zIndex: 50,
+      position: 'sticky', top: 0, zIndex: 50, gap: 12,
     }}>
-      <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
-        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #4A5D3A, #6B8E5A)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F5F0E6' }}>
+      <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', flexShrink: 0 }}>
+        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #4A5D3A, #6B8E5A)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F5F0E6', flexShrink: 0 }}>
           <Leaf size={20} strokeWidth={1.5} />
         </div>
-        <div>
+        <div className="nav-brand-text">
           <div style={{ ...s.serif, fontSize: 22, fontWeight: 600, letterSpacing: '-0.02em', color: '#2B2416' }}>Homestead</div>
           <div style={{ fontSize: 10, letterSpacing: '0.2em', color: '#8B7D5B', textTransform: 'uppercase' }}>Home Education</div>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
         {items.map(item => {
           const active = isActive(pathname, item.path);
           const Icon = item.icon;
           return (
-            <button key={item.path} onClick={() => navigate(item.path)} style={{
+            <button key={item.path} onClick={() => navigate(item.path)} className="nav-item" title={item.label} style={{
               background: active ? '#4A5D3A' : 'transparent',
               color: active ? '#F5F0E6' : '#5D4E2A',
               border: 'none', padding: '10px 14px', borderRadius: 8,
@@ -49,7 +49,7 @@ export default function Nav({ region, onChangeRegion, onSignOut }) {
               fontFamily: 'inherit', transition: 'all 0.15s ease',
             }}>
               <Icon size={15} strokeWidth={1.8} />
-              {item.label}
+              <span className="nav-item-label">{item.label}</span>
             </button>
           );
         })}
@@ -60,15 +60,19 @@ export default function Nav({ region, onChangeRegion, onSignOut }) {
             display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', marginLeft: 8,
           }}>
             <span style={{ fontSize: 15 }}>{region.flag}</span>
-            <span style={{ fontSize: 12 }}>{region.id}</span>
+            <span className="nav-region-label" style={{ fontSize: 12 }}>{region.id}</span>
           </button>
         )}
         {onSignOut && (
-          <button onClick={onSignOut} style={{
+          <button onClick={onSignOut} className="nav-signout" title="Sign out" style={{
             background: 'transparent', color: '#8B7D5B', border: '1px solid #E8DCC4',
             padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 6,
             fontFamily: 'inherit', marginLeft: 6,
-          }}>Sign out</button>
+          }}>
+            <LogOut size={14} />
+            <span>Sign out</span>
+          </button>
         )}
       </div>
     </nav>

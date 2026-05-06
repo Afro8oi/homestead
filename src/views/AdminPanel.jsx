@@ -32,10 +32,10 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="fade-in" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 32px' }}>
       <div style={{ marginBottom: 32 }}>
         <div style={{ fontSize: 11, letterSpacing: '0.25em', color: '#8B7D5B', textTransform: 'uppercase', marginBottom: 8 }}>Administration</div>
-        <h1 style={{ ...s.serif, fontSize: 48, fontWeight: 400, letterSpacing: '-0.02em', margin: 0, color: '#2B2416' }}>
+        <h1 className="h-display" style={{ ...s.serif, fontSize: 48, fontWeight: 400, letterSpacing: '-0.02em', margin: 0, color: '#2B2416' }}>
           Manage your <span style={{ fontStyle: 'italic', color: '#4A5D3A' }}>home academy</span>
         </h1>
       </div>

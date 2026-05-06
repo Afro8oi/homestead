@@ -6,10 +6,10 @@ import { s } from '../styles.js';
 export default function LibraryView() {
   const navigate = useNavigate();
   return (
-    <div className="fade-in" style={{ maxWidth: 1300, margin: '0 auto', padding: '48px 32px' }}>
+    <div className="fade-in page-pad" style={{ maxWidth: 1300, margin: '0 auto', padding: '48px 32px' }}>
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontSize: 11, letterSpacing: '0.25em', color: '#8B7D5B', textTransform: 'uppercase', marginBottom: 8 }}>Resource Library</div>
-        <h1 style={{ ...s.serif, fontSize: 48, fontWeight: 400, letterSpacing: '-0.02em', margin: '0 0 12px', color: '#2B2416' }}>
+        <h1 className="h-display" style={{ ...s.serif, fontSize: 48, fontWeight: 400, letterSpacing: '-0.02em', margin: '0 0 12px', color: '#2B2416' }}>
           The full <span style={{ fontStyle: 'italic', color: '#4A5D3A' }}>curriculum</span>
         </h1>
         <p style={{ fontSize: 17, color: '#5D4E2A', maxWidth: 700, lineHeight: 1.6, margin: 0 }}>
