@@ -10,7 +10,9 @@ import SubjectDetailView from './views/SubjectDetailView.jsx';
 import LessonView from './views/LessonView.jsx';
 import GamesHub from './views/GamesHub.jsx';
 import MultiplicationQuest from './games/MultiplicationQuest.jsx';
+import VerseMemoryMatch from './games/VerseMemoryMatch.jsx';
 import RecordsView from './views/RecordsView.jsx';
+import AttendanceView from './views/AttendanceView.jsx';
 import AdminPanel from './views/AdminPanel.jsx';
 import Login from './views/Login.jsx';
 import Signup from './views/Signup.jsx';
@@ -23,6 +25,7 @@ import {
   getHousehold, createHousehold, updateHouseholdRegion,
   listStudents, insertStudent, updateStudent, deleteStudent,
   listGrades, insertGrade, seedHousehold,
+  listLessonCompletions, recordLessonCompletion,
 } from './lib/api.js';
 import { s } from './styles.js';
 
@@ -72,6 +75,7 @@ function DataProvider() {
   const [household, setHousehold] = useState(null);
   const [students, setStudentsState] = useState([]);
   const [grades, setGradesState] = useState({});
+  const [completions, setCompletions] = useState({});
   const [needsRegionSetup, setNeedsRegionSetup] = useState(
     Boolean(location.state?.needsRegionSetup)
   );
@@ -92,14 +96,16 @@ function DataProvider() {
           await seedHousehold(hh.id);
           justCreated = true;
         }
-        const [sts, grs] = await Promise.all([
+        const [sts, grs, comps] = await Promise.all([
           listStudents(hh.id),
           listGrades(hh.id),
+          listLessonCompletions(hh.id),
         ]);
         if (cancelled) return;
         setHousehold(hh);
         setStudentsState(sts);
         setGradesState(grs);
+        setCompletions(comps);
         if (justCreated) setNeedsRegionSetup(true);
         setLoading(false);
       } catch (e) {
@@ -182,11 +188,26 @@ function DataProvider() {
       .filter(([, d]) => d.grade < 85 || d.trend === 'down')
       .sort((a, b) => a[1].grade - b[1].grade);
 
+  const completeLesson = async (studentId, lessonId, subject, score) => {
+    setCompletions(prev => {
+      const set = new Set(prev[studentId] || []);
+      set.add(lessonId);
+      return { ...prev, [studentId]: set };
+    });
+    try { await recordLessonCompletion(household.id, studentId, lessonId, subject, score); }
+    catch (e) { console.error('Failed to persist lesson completion', e); }
+  };
+
+  const isLessonComplete = (studentId, lessonId) =>
+    Boolean(completions[studentId]?.has?.(lessonId));
+
   const value = {
     students, setStudents,
     grades, setGrades,
     recordGrade,
     buildSubjects, getStruggleAreas,
+    completions, completeLesson, isLessonComplete,
+    householdId: household?.id,
     region, regionId, setRegionId,
     household: {
       name: household?.name || 'Our Household',
@@ -216,7 +237,9 @@ function DataProvider() {
           <Route path="/lesson/:id" element={<LessonView />} />
           <Route path="/games" element={<GamesHub />} />
           <Route path="/games/mult-quest" element={<MultiplicationQuest />} />
+          <Route path="/games/verse-match" element={<VerseMemoryMatch />} />
           <Route path="/records" element={<RecordsView />} />
+          <Route path="/attendance" element={<AttendanceView />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

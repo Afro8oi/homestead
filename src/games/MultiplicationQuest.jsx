@@ -88,7 +88,7 @@ export default function MultiplicationQuest() {
           </p>
           <div style={{ background: 'rgba(255,253,247,0.1)', borderRadius: 12, padding: 20, marginBottom: 24 }}>
             <div style={{ fontSize: 11, letterSpacing: '0.2em', opacity: 0.8, textTransform: 'uppercase', marginBottom: 8 }}>Playing as</div>
-            <select value={selectedStudent} onChange={(e) => setSelectedStudent(Number(e.target.value))}
+            <select value={selectedStudent || ''} onChange={(e) => setSelectedStudent(e.target.value)}
               style={{ padding: '10px 14px', border: 'none', borderRadius: 8, background: '#FFFDF7', fontSize: 15, fontFamily: 'inherit', color: '#2B2416', minWidth: 200 }}>
               {students.map(st => <option key={st.id} value={st.id}>{st.name}</option>)}
             </select>

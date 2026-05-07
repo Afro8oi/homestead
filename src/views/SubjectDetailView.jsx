@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { findSubjectBySlug, ICON_MAP } from '../data/subjectLibrary.js';
 import { MATH_GRADE_3 } from '../data/mathGrade3.js';
+import { useData } from '../App.jsx';
 import { s } from '../styles.js';
 
 export default function SubjectDetailView() {
@@ -10,6 +11,7 @@ export default function SubjectDetailView() {
   const navigate = useNavigate();
   const subject = findSubjectBySlug(slug);
   const [openLevel, setOpenLevel] = useState(null);
+  const { students, completions } = useData();
 
   if (!subject) {
     return (
@@ -89,17 +91,27 @@ export default function SubjectDetailView() {
                     <div key={ui} style={{ marginBottom: 20 }}>
                       <div style={{ ...s.serif, fontSize: 16, fontWeight: 600, color: '#4A5D3A', marginBottom: 10 }}>{unit.unitName}</div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        {unit.lessons.map((lesson) => (
-                          <div key={lesson.id} onClick={() => openLesson(lesson)} className="hover-lift"
-                            style={{ padding: '12px 14px', borderRadius: 8, background: '#F5F0E6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <div style={{ width: 28, height: 28, borderRadius: '50%', background: subject.color, color: '#F5F0E6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600 }}>
-                              {lesson.id.split('-')[1]}
+                        {unit.lessons.map((lesson) => {
+                          // Count how many students in the household have completed this lesson.
+                          const completedBy = students.filter(st => completions[st.id]?.has?.(lesson.id));
+                          return (
+                            <div key={lesson.id} onClick={() => openLesson(lesson)} className="hover-lift"
+                              style={{ padding: '12px 14px', borderRadius: 8, background: '#F5F0E6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <div style={{ width: 28, height: 28, borderRadius: '50%', background: subject.color, color: '#F5F0E6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600 }}>
+                                {lesson.id.split('-')[1]}
+                              </div>
+                              <div style={{ flex: 1, fontSize: 14, color: '#2B2416', fontWeight: 500 }}>{lesson.title}</div>
+                              {completedBy.length > 0 && (
+                                <span title={completedBy.map(s => s.name).join(', ')}
+                                  style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: '#4A5D3A', background: '#E8F0DD', padding: '3px 8px', borderRadius: 12 }}>
+                                  <CheckCircle2 size={11} /> {completedBy.length}
+                                </span>
+                              )}
+                              <div style={{ fontSize: 12, color: '#8B7D5B' }}>{lesson.duration}</div>
+                              <ChevronRight size={14} color={subject.color} />
                             </div>
-                            <div style={{ flex: 1, fontSize: 14, color: '#2B2416', fontWeight: 500 }}>{lesson.title}</div>
-                            <div style={{ fontSize: 12, color: '#8B7D5B' }}>{lesson.duration}</div>
-                            <ChevronRight size={14} color={subject.color} />
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   ))}

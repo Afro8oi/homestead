@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Library, Gamepad2, FileText, Settings, Leaf, LogOut } from 'lucide-react';
+import { Home, Users, Library, Gamepad2, FileText, Settings, Leaf, LogOut, CalendarCheck } from 'lucide-react';
 import { s } from '../styles.js';
 
 const items = [
@@ -7,6 +7,7 @@ const items = [
   { path: '/parent',  label: 'Parent',  icon: Users },
   { path: '/library', label: 'Library', icon: Library },
   { path: '/games',   label: 'Games',   icon: Gamepad2 },
+  { path: '/attendance', label: 'Attendance', icon: CalendarCheck },
   { path: '/records', label: 'Records', icon: FileText },
   { path: '/admin',   label: 'Admin',   icon: Settings },
 ];

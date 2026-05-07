@@ -9,7 +9,7 @@ export default function LessonView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { students, recordGrade } = useData();
+  const { students, recordGrade, completeLesson: persistCompletion, isLessonComplete } = useData();
   const lesson = findLessonById(id);
   const subjectName = location.state?.subjectName || 'Mathematics';
   const fromPath = location.state?.from || '/library';
@@ -45,9 +45,12 @@ export default function LessonView() {
     const score = Math.round((correctCount / lesson.practice.length) * 100);
     if (selectedStudent) {
       recordGrade(selectedStudent, subjectName, score);
+      persistCompletion(selectedStudent, lesson.id, subjectName, score);
     }
     setCompleted(true);
   };
+
+  const alreadyCompleted = selectedStudent && isLessonComplete(selectedStudent, lesson.id);
 
   return (
     <div className="fade-in page-pad" style={{ maxWidth: 900, margin: '0 auto', padding: '48px 32px' }}>
@@ -68,7 +71,12 @@ export default function LessonView() {
         </div>
         <div style={{ marginTop: 12 }}>
           <div style={{ fontSize: 11, color: '#8B7D5B', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 6 }}>Recording score for</div>
-          <select value={selectedStudent} onChange={(e) => setSelectedStudent(Number(e.target.value))} style={{ padding: '8px 12px', border: '1px solid #E8DCC4', borderRadius: 8, background: '#FFFDF7', fontSize: 14, fontFamily: 'inherit', color: '#2B2416' }}>
+          {alreadyCompleted && (
+            <div style={{ marginBottom: 8, fontSize: 12, color: '#4A5D3A', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <CheckCircle2 size={14} /> Already completed by this student — completing again will record a new score.
+            </div>
+          )}
+          <select value={selectedStudent || ''} onChange={(e) => setSelectedStudent(e.target.value)} style={{ padding: '8px 12px', border: '1px solid #E8DCC4', borderRadius: 8, background: '#FFFDF7', fontSize: 14, fontFamily: 'inherit', color: '#2B2416' }}>
             {students.map(st => <option key={st.id} value={st.id}>{st.name} ({st.grade})</option>)}
           </select>
         </div>

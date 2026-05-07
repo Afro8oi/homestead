@@ -120,6 +120,70 @@ export async function insertGrade(householdId, studentId, subject, score) {
   if (error) throw error;
 }
 
+// ---------- lesson completions ----------
+// Returns { [studentId]: Set<lessonId> } so views can quickly check completion.
+export async function listLessonCompletions(householdId) {
+  const { data, error } = await supabase
+    .from('lesson_completions')
+    .select('student_id, lesson_id, subject, score, completed_at')
+    .eq('household_id', householdId);
+  if (error) throw error;
+  const out = {};
+  for (const row of data || []) {
+    const set = out[row.student_id] || (out[row.student_id] = new Set());
+    set.add(row.lesson_id);
+  }
+  return out;
+}
+
+export async function recordLessonCompletion(householdId, studentId, lessonId, subject, score) {
+  const { error } = await supabase
+    .from('lesson_completions')
+    .upsert(
+      { household_id: householdId, student_id: studentId, lesson_id: lessonId, subject, score },
+      { onConflict: 'student_id,lesson_id' }
+    );
+  if (error) throw error;
+}
+
+// ---------- attendance ----------
+export async function listAttendance(householdId, fromDate) {
+  let q = supabase
+    .from('attendance')
+    .select('student_id, date, status, note')
+    .eq('household_id', householdId);
+  if (fromDate) q = q.gte('date', fromDate);
+  const { data, error } = await q;
+  if (error) throw error;
+  // Returns { [studentId]: { [yyyy-mm-dd]: { status, note } } }
+  const out = {};
+  for (const row of data || []) {
+    const sg = out[row.student_id] || (out[row.student_id] = {});
+    sg[row.date] = { status: row.status, note: row.note };
+  }
+  return out;
+}
+
+export async function setAttendance(householdId, studentId, date, status, note) {
+  if (!status) {
+    // Clearing → delete the row.
+    const { error } = await supabase
+      .from('attendance')
+      .delete()
+      .eq('student_id', studentId)
+      .eq('date', date);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase
+    .from('attendance')
+    .upsert(
+      { household_id: householdId, student_id: studentId, date, status, note: note || null },
+      { onConflict: 'student_id,date' }
+    );
+  if (error) throw error;
+}
+
 // ---------- seeding ----------
 // On signup, populate a household with the same demo data the prototype shipped with.
 export async function seedHousehold(householdId) {
